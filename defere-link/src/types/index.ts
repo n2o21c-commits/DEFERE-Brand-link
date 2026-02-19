@@ -28,7 +28,8 @@ export interface Theme {
 export interface BrandNote {
   title: string;
   content: string;
-  image?: string; // base64
+  image?: string; // base64 (legacy)
+  images?: string[]; // base64 array (Coming Soon 이미지 2장)
   visible: boolean;
 }
 

@@ -21,6 +21,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     setMounted(true);
+    useStore.getState().loadFromServer();
   }, []);
 
   if (!mounted) return null;
@@ -29,7 +30,7 @@ export default function AdminPage() {
     { id: 'profile', label: '프로필' },
     { id: 'links', label: '링크' },
     { id: 'lookbook', label: '룩북' },
-    { id: 'note', label: '브랜드 노트' },
+    { id: 'note', label: 'Coming Soon' },
     { id: 'theme', label: '디자인' },
   ];
 
@@ -40,9 +41,9 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-gray-50 pb-20 text-gray-900">
       <header className="bg-white border-b sticky top-0 z-50">
-        <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" onClick={() => router.push('/')}>
                <ArrowLeft size={20} />
@@ -53,8 +54,11 @@ export default function AdminPage() {
              <Button variant="outline" size="sm" onClick={handleReset} className="text-red-500 hover:text-red-600">
                <RefreshCw size={16} className="mr-2" /> 초기화
              </Button>
+             <Button variant="outline" size="sm" onClick={() => useStore.getState().saveToServer()}>
+               <Save size={16} className="mr-2" /> 서버 저장
+             </Button>
              <Button size="sm" onClick={() => router.push('/')}>
-               <Save size={16} className="mr-2" /> 완료 (메인으로)
+               완료 (메인으로)
              </Button>
           </div>
         </div>

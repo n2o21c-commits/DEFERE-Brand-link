@@ -15,23 +15,29 @@ interface Actions {
   updateBrandNote: (note: Partial<BrandNote>) => void;
   setTheme: (theme: Partial<Theme>) => void;
   resetAll: () => void;
+  loadFromServer: () => Promise<void>;
+  saveToServer: () => Promise<void>;
 }
 
 const initialState: StoreData = {
   profile: {
-    logoDisplay: 'text',
+    logoDisplay: 'image',
+    logoImage: '/uploads/defere-brand-card.png',
     logoText: 'DEFERE',
-    slogan: 'Essential items for your daily life.',
+    slogan: 'Essential Aesthetics',
     description: '',
   },
   links: [
-    { id: '1', title: 'Official Store', url: 'https://smartstore.naver.com/defere', active: true },
+    { id: '1', title: 'Official Website', url: 'https://defere.co.kr', active: true },
     { id: '2', title: 'Instagram', url: 'https://instagram.com/defere_official', active: true },
+    { id: '3', title: 'Naver BLOG', url: 'https://blog.naver.com/defere', active: true },
+    { id: '4', title: 'Coupang', url: 'https://www.coupang.com', active: false },
+    { id: '5', title: 'GS Shop', url: 'https://www.gsshop.com', active: false },
   ],
   lookbook: [],
   brandNote: {
-    title: 'Material & Process',
-    content: 'DEFERE uses high-quality fabrics...',
+    title: 'Coming Soon',
+    content: 'Classic Structured Tote - Coming Soon\nWool Trench - Coming Soon',
     visible: true,
   },
   theme: {
@@ -44,7 +50,7 @@ const initialState: StoreData = {
 
 export const useStore = create<StoreData & Actions>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       ...initialState,
 
       setProfile: (newProfile) =>
@@ -88,6 +94,43 @@ export const useStore = create<StoreData & Actions>()(
         set((state) => ({ theme: { ...state.theme, ...newTheme } })),
 
       resetAll: () => set(initialState),
+
+      loadFromServer: async () => {
+        try {
+          const response = await fetch('/api/settings');
+          if (response.ok) {
+            const data = await response.json();
+            if (data) {
+              set(data);
+            }
+          }
+        } catch (error) {
+          console.error('Failed to load settings:', error);
+        }
+      },
+
+      saveToServer: async () => {
+        const state = get();
+        // Remove functions from state before saving
+        const { 
+          setProfile, addLink, updateLink, removeLink, reorderLinks,
+          addLookbookImage, removeLookbookImage, reorderLookbook,
+          updateBrandNote, setTheme, resetAll, loadFromServer, saveToServer,
+          ...dataToSave 
+        } = state;
+
+        try {
+          await fetch('/api/settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataToSave),
+          });
+          alert('서버에 저장되었습니다.');
+        } catch (error) {
+          console.error('Failed to save settings:', error);
+          alert('저장 실패');
+        }
+      },
     }),
     {
       name: 'defere-storage',

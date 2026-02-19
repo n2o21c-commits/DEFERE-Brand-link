@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:stitch.withgoogle.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:deepwiki.com)",
+      "WebFetch(domain:mcpservers.org)",
+      "WebFetch(domain:discuss.ai.google.dev)",
+      "WebFetch(domain:playbooks.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "Bash(gcloud auth print-access-token:*)",
+      "Bash(npx:*)",
+      "Bash(env:*)",
+      "Bash(where:*)",
+      "Bash(gcloud --version:*)",
+      "Bash(node --version:*)",
+      "Bash(taskkill:*)",
+      "Bash(netstat:*)",
+      "Bash(cmd /c \"taskkill /F /PID 4788\")",
+      "Bash(findstr:*)",
+      "Bash(cmd /c \"taskkill /F /PID 4788 /T\")",
+      "Bash(cmd /c:*)",
+      "Bash(powershell -Command \"Get-Process -Id 4788 | Select-Object Name, Id, Path\")",
+      "Bash(powershell -Command \"Stop-Process -Id 4788 -Force; Start-Sleep -Seconds 2; Test-NetConnection -ComputerName localhost -Port 3000 | Select-Object TcpTestSucceeded\")"
+    ]
+  }
+}

@@ -16,14 +16,29 @@ export function AdminLookbook() {
     setLoading(true);
     try {
       for (let i = 0; i < files.length; i++) {
-        const compressed = await compressImage(files[i]);
-        addLookbookImage(compressed);
+        const formData = new FormData();
+        formData.append('file', files[i]);
+
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          const { url } = await response.json();
+          addLookbookImage(url);
+        } else {
+          console.error('File upload failed');
+          alert('파일 업로드 실패');
+        }
       }
     } catch (error) {
       console.error(error);
       alert("이미지 업로드 오류");
     } finally {
       setLoading(false);
+      // Reset input value to allow uploading same file again
+      e.target.value = '';
     }
   };
 

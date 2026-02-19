@@ -1,0 +1,28 @@
+{
+  "profile": {
+    "logoDisplay": "image",
+    "logoImage": "/uploads/defere-brand-card.png",
+    "logoText": "DEFERE",
+    "slogan": "Essential Aesthetics",
+    "description": ""
+  },
+  "links": [
+    { "id": "1", "title": "Official Website", "url": "https://defere.co.kr", "active": true },
+    { "id": "2", "title": "Instagram", "url": "https://instagram.com/defere_official", "active": true },
+    { "id": "3", "title": "Naver Store", "url": "https://smartstore.naver.com/defere", "active": true },
+    { "id": "4", "title": "Coupang", "url": "https://www.coupang.com", "active": false },
+    { "id": "5", "title": "GS Shop", "url": "https://www.gsshop.com", "active": false }
+  ],
+  "lookbook": [],
+  "brandNote": {
+    "title": "Featured Collection",
+    "content": "Classic Structured Tote - Coming Soon\nWool Trench - Coming Soon",
+    "visible": true
+  },
+  "theme": {
+    "backgroundColor": "#ffffff",
+    "textColor": "#171717",
+    "accentColor": "#f4f4f4",
+    "buttonStyle": "sharp"
+  }
+}
