@@ -120,15 +120,21 @@ export const useStore = create<StoreData & Actions>()(
         } = state;
 
         try {
-          await fetch('/api/settings', {
+          const response = await fetch('/api/settings', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dataToSave),
           });
-          alert('서버에 저장되었습니다.');
+          if (response.ok) {
+            alert('서버에 저장되었습니다.');
+          } else {
+            const data = await response.json();
+            console.error('Save failed:', data);
+            alert('저장 실패: ' + (data.error ?? '서버 오류'));
+          }
         } catch (error) {
           console.error('Failed to save settings:', error);
-          alert('저장 실패');
+          alert('저장 실패: 네트워크 오류');
         }
       },
     }),
