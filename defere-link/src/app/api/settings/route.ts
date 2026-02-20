@@ -34,6 +34,7 @@ export async function POST(req: Request) {
     await put('settings.json', JSON.stringify(data), {
       access: 'private',
       addRandomSuffix: false,
+      allowOverwrite: true,
       contentType: 'application/json',
     });
     return NextResponse.json({ success: true });
