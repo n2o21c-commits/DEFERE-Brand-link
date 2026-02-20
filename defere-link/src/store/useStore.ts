@@ -31,8 +31,8 @@ const initialState: StoreData = {
     { id: '1', title: 'Official Website', url: 'https://defere.co.kr', active: true },
     { id: '2', title: 'Instagram', url: 'https://instagram.com/defere_official', active: true },
     { id: '3', title: 'Naver BLOG', url: 'https://blog.naver.com/defere', active: true },
-    { id: '4', title: 'Coupang', url: 'https://www.coupang.com', active: false },
-    { id: '5', title: 'GS Shop', url: 'https://www.gsshop.com', active: false },
+    { id: '4', title: 'Coupang', url: 'https://www.coupang.com', active: true },
+    { id: '5', title: 'GS Shop', url: 'https://www.gsshop.com', active: true },
   ],
   lookbook: [],
   brandNote: {
