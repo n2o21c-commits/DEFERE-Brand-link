@@ -8,7 +8,7 @@ import { AdminLinks } from '@/components/admin/AdminLinks';
 import { AdminLookbook } from '@/components/admin/AdminLookbook';
 import { AdminBrandNote } from '@/components/admin/AdminBrandNote';
 import { AdminTheme } from '@/components/admin/AdminTheme';
-import { ArrowLeft, RefreshCw, Save } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Save, LogOut } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 
 type Tab = 'profile' | 'links' | 'lookbook' | 'note' | 'theme';
@@ -40,6 +40,11 @@ export default function AdminPage() {
     }
   };
 
+  const handleLogout = async () => {
+    await fetch('/api/auth', { method: 'DELETE' });
+    router.push('/admin/login');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 pb-20 text-gray-900">
       <header className="bg-white border-b sticky top-0 z-50">
@@ -59,6 +64,9 @@ export default function AdminPage() {
              </Button>
              <Button size="sm" onClick={() => router.push('/')}>
                완료 (메인으로)
+             </Button>
+             <Button variant="ghost" size="icon" onClick={handleLogout} title="로그아웃">
+               <LogOut size={18} />
              </Button>
           </div>
         </div>
