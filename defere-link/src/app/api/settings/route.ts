@@ -7,7 +7,7 @@ export async function GET() {
     const { blobs } = await list({ prefix: 'settings.json' });
     if (blobs.length === 0) return NextResponse.json(null);
 
-    const response = await fetch(blobs[0].url);
+    const response = await fetch(blobs[0].url, { cache: 'no-store' });
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
