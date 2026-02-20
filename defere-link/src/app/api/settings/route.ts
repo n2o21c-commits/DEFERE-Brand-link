@@ -1,33 +1,32 @@
 
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { put, list } from '@vercel/blob';
+
+export async function GET() {
+  try {
+    const { blobs } = await list({ prefix: 'settings.json' });
+    if (blobs.length === 0) return NextResponse.json(null);
+
+    const response = await fetch(blobs[0].url);
+    const data = await response.json();
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error('Settings load error:', error);
+    return NextResponse.json({ error: 'Load failed' }, { status: 500 });
+  }
+}
 
 export async function POST(req: Request) {
   try {
     const data = await req.json();
-    const dataDir = path.join(process.cwd(), 'data');
-    if (!fs.existsSync(dataDir)) {
-      fs.mkdirSync(dataDir, { recursive: true });
-    }
-    fs.writeFileSync(path.join(dataDir, 'settings.json'), JSON.stringify(data, null, 2));
+    await put('settings.json', JSON.stringify(data), {
+      access: 'public',
+      addRandomSuffix: false,
+      contentType: 'application/json',
+    });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Settings save error:', error);
     return NextResponse.json({ error: 'Save failed' }, { status: 500 });
-  }
-}
-
-export async function GET() {
-  try {
-    const filepath = path.join(process.cwd(), 'data', 'settings.json');
-    if (fs.existsSync(filepath)) {
-      const data = fs.readFileSync(filepath, 'utf-8');
-      return NextResponse.json(JSON.parse(data));
-    }
-    return NextResponse.json(null);
-  } catch (error) {
-    console.error('Settings load error:', error);
-    return NextResponse.json({ error: 'Load failed' }, { status: 500 });
   }
 }
