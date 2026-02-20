@@ -14,20 +14,25 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
-    const res = await fetch('/api/auth', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password }),
-    });
+    try {
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
 
-    if (res.ok) {
-      router.push('/admin');
-    } else {
-      const data = await res.json();
-      setError(data.error ?? '오류가 발생했습니다.');
+      if (res.ok) {
+        router.push('/admin');
+      } else {
+        const data = await res.json();
+        setError(data.error ?? '오류가 발생했습니다.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('네트워크 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
