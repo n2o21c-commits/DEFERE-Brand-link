@@ -4,6 +4,9 @@ import { put, list } from '@vercel/blob';
 
 export async function GET() {
   try {
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      return NextResponse.json({ error: 'BLOB_READ_WRITE_TOKEN not set' }, { status: 500 });
+    }
     const { blobs } = await list({ prefix: 'settings.json' });
     if (blobs.length === 0) return NextResponse.json(null);
 
@@ -11,13 +14,17 @@ export async function GET() {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error('Settings load error:', error);
-    return NextResponse.json({ error: 'Load failed' }, { status: 500 });
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('Settings load error:', message);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
 export async function POST(req: Request) {
   try {
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      return NextResponse.json({ error: 'BLOB_READ_WRITE_TOKEN not set' }, { status: 500 });
+    }
     const data = await req.json();
     await put('settings.json', JSON.stringify(data), {
       access: 'public',
@@ -26,7 +33,8 @@ export async function POST(req: Request) {
     });
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Settings save error:', error);
-    return NextResponse.json({ error: 'Save failed' }, { status: 500 });
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('Settings save error:', message);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
