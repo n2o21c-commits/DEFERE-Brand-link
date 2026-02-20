@@ -64,7 +64,7 @@ export default function Home() {
       <div className="mx-auto w-full max-w-md min-h-screen flex flex-col relative shadow-2xl overflow-hidden">
 
         {/* Hero Carousel */}
-        <header className="relative w-full h-[38vh] overflow-hidden">
+        <header className="relative w-full h-[60vh] md:h-[38vh] overflow-hidden">
           {/* 이미지 */}
           <div
             className="absolute inset-0 bg-cover bg-center transition-all duration-700"
