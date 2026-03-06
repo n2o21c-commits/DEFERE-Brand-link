@@ -3,6 +3,7 @@ import { useStore } from '@/store/useStore';
 import { Button } from '@/components/ui/Button';
 import { Upload, Trash2 } from 'lucide-react';
 import Image from 'next/image';
+import { compressImage } from '@/utils/imageCompression';
 
 interface LookbookSectionProps {
   title: string;
@@ -22,24 +23,12 @@ function LookbookSection({ title, description, items, onAdd, onRemove }: Lookboo
     setLoading(true);
     try {
       for (let i = 0; i < files.length; i++) {
-        const formData = new FormData();
-        formData.append('file', files[i]);
-
-        const response = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (response.ok) {
-          const { url } = await response.json();
-          onAdd(url);
-        } else {
-          const data = await response.json();
-          alert('파일 업로드 실패: ' + (data.error ?? '알 수 없는 오류'));
-        }
+        const file = files[i];
+        const compressedBase64 = await compressImage(file);
+        onAdd(compressedBase64);
       }
     } catch (error) {
-      alert('이미지 업로드 오류');
+      alert('이미지 처리 오류: ' + String(error));
     } finally {
       setLoading(false);
       e.target.value = '';
