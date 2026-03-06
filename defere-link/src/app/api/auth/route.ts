@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: '비밀번호가 틀렸습니다.' }, { status: 401 });
   }
 
-  const secret = new TextEncoder().encode(process.env.JWT_SECRET ?? 'fallback-secret');
+  const secret = new TextEncoder().encode(process.env.JWT_SECRET || 'defere-secret-fallback-2024');
   const token = await new SignJWT({ role: 'admin' })
     .setProtectedHeader({ alg: 'HS256' })
     .setExpirationTime('24h')
