@@ -37,6 +37,7 @@ export interface StoreData {
   profile: Profile;
   links: LinkItem[];
   lookbook: LookbookItem[];
+  lookbookBottom: LookbookItem[];
   brandNote: BrandNote;
   theme: Theme;
 }

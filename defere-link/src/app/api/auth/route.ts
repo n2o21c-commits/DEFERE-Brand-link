@@ -4,7 +4,9 @@ import { SignJWT } from 'jose';
 export async function POST(req: Request) {
   const { password } = await req.json();
 
-  if (password !== process.env.ADMIN_PASSWORD) {
+  const expectedPassword = process.env.ADMIN_PASSWORD || '0988';
+
+  if (password !== expectedPassword) {
     return NextResponse.json({ error: '비밀번호가 틀렸습니다.' }, { status: 401 });
   }
 

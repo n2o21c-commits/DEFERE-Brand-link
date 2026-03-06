@@ -12,6 +12,9 @@ interface Actions {
   addLookbookImage: (image: string) => void;
   removeLookbookImage: (id: string) => void;
   reorderLookbook: (lookbook: LookbookItem[]) => void;
+  addLookbookBottomImage: (image: string) => void;
+  removeLookbookBottomImage: (id: string) => void;
+  reorderLookbookBottom: (lookbook: LookbookItem[]) => void;
   updateBrandNote: (note: Partial<BrandNote>) => void;
   setTheme: (theme: Partial<Theme>) => void;
   resetAll: () => void;
@@ -31,10 +34,11 @@ const initialState: StoreData = {
     { id: '1', title: 'Official Website', url: 'https://defere.co.kr', active: true },
     { id: '2', title: 'Instagram', url: 'https://instagram.com/defere_official', active: true },
     { id: '3', title: 'Naver BLOG', url: 'https://blog.naver.com/defere', active: true },
-    { id: '4', title: 'Coupang', url: 'https://www.coupang.com', active: true },
-    { id: '5', title: 'GS Shop', url: 'https://www.gsshop.com', active: true },
+    { id: '4', title: 'Lotte ON', url: 'https://www.lotteon.com/p/display/seller/sellerShop/LO10149325?spdNo=LO2607011847&pdNo=LO2607011847&trGrpCd=SR&lrtrStoreDpYn=N&owhpNo=&dvCstPolNo=3566421&trNo=LO10149325&sitmNo=LO2607011847_2607011848&lrtrNo=', active: true },
+    { id: '5', title: 'Smart Store', url: 'https://smartstore.naver.com/defere', active: true },
   ],
   lookbook: [],
+  lookbookBottom: [],
   brandNote: {
     title: 'Coming Soon',
     content: 'Classic Structured Tote - Coming Soon\nWool Trench - Coming Soon',
@@ -87,6 +91,18 @@ export const useStore = create<StoreData & Actions>()(
 
       reorderLookbook: (newLookbook) => set({ lookbook: newLookbook }),
 
+      addLookbookBottomImage: (image) =>
+        set((state) => ({
+          lookbookBottom: [...state.lookbookBottom, { id: crypto.randomUUID(), image }],
+        })),
+
+      removeLookbookBottomImage: (id) =>
+        set((state) => ({
+          lookbookBottom: state.lookbookBottom.filter((item) => item.id !== id),
+        })),
+
+      reorderLookbookBottom: (newLookbook) => set({ lookbookBottom: newLookbook }),
+
       updateBrandNote: (note) =>
         set((state) => ({ brandNote: { ...state.brandNote, ...note } })),
 
@@ -115,6 +131,7 @@ export const useStore = create<StoreData & Actions>()(
         const { 
           setProfile, addLink, updateLink, removeLink, reorderLinks,
           addLookbookImage, removeLookbookImage, reorderLookbook,
+          addLookbookBottomImage, removeLookbookBottomImage, reorderLookbookBottom,
           updateBrandNote, setTheme, resetAll, loadFromServer, saveToServer,
           ...dataToSave 
         } = state;
@@ -141,6 +158,14 @@ export const useStore = create<StoreData & Actions>()(
     {
       name: 'defere-storage',
       storage: createJSONStorage(() => localStorage),
+      version: 3, // Bump version for lookbookBottom feature
+      migrate: (persistedState: any, version: number) => {
+        if (version < 3) {
+          // Force reset to pick up lookbookBottom field
+          return { ...initialState, ...(persistedState || {}), lookbookBottom: [] };
+        }
+        return persistedState;
+      },
     }
   )
 );
